@@ -1,2 +1,2 @@
 # AnaliseSQL
-Portfolio com pojetos de Análise de dados usando SQL
+Portfolio com projetos de Análise de dados usando SQL
