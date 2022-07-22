@@ -1,0 +1,46 @@
+#Projeto de Análise da Tabela de Preços de Medicamentos
+
+Os dados apresentados neste projeto são públicos e foram retirados do Portal
+Brasileiro dos Dados abertos em 21/07/2022, disponibilizados via:
+https://dados.gov.br/dataset/preco-de-medicamentos-no-brasil-consumidor
+
+No momento, correspondia a 26.310 registros, utilizados em sua integralidade
+para este projeto.
+
+
+1- Limpeza e Formatação do Dataset:
+
+- Modificação dos valores do formato (X,X) para (X.X)
+- Modificação do separador de colunas ";" para ","
+- Arquivo salvo em formato UTF-8 ao invés de ANSI
+- As colunas: "Código GGREM", "Registro", "EAN 1", "EAN 2" e "EAN 3"
+foram retiradas do dataset.
+- Os Nomes das colunas foram alterados: Retirada dos acentos e caracteres
+especiais, bem como formatação dos espaços entre palavras com "_"
+  Ex: PMC 20% = pmc_20
+      Laboratório = Laboratorio
+
+2- Análise dos Dados:
+Foram feitas 5 perguntas aos dados
+
+  a) Quantos laboratórios possuíam registro sanitário de substâncias cujo Preço
+  Máximo ao Consumidor (PMC) era 0 e estavam em comercialização em 2020?
+
+  b) Qual a Classe Terapêutica e Qual o valor da substância de maior Preço
+  Máximo ao Consumidor que estava em comercialização em 2020 e qual o
+  Laboratório que a Comercializava?
+
+  c) Quais as 10 substâncias - sem repetições - de maior PMC comercializadas
+  em 2020 e seus respectivos laboratórios?
+
+  d) Qual o valor médio das substâncias de Tarja Preta, considerando-se Preço
+  Máximo ao Consumidor no indicador de 20% (PMC 20%) em comercialização em 2020?
+
+  e) Qual o valor médio dos medicamentos de tarja vermelha, comercializados em
+  2020, destinados a farmácias, drogarias e entes da Adm. Pública cujo Preço
+  era maior que Zero, utilizando-se a maior taxação (PF 20%)?
+
+3- Apresentação da Análise:
+
+Após a análise exploratória os dados, optei pela utilização do Google Data
+Studio para a criação dos Dashboard/Visualizações dos resultados

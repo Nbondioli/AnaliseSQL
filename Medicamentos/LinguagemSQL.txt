@@ -1,0 +1,64 @@
+#Linguagem SQL das Questões ao Dataset
+
+#a) Quantos laboratórios possuíam registro sanitário de substâncias cujo Preço
+#Máximo ao Consumidor era 0 e estavam em comercialização em 2020?
+
+select count(distinct laboratorio) as Labs
+from port1.ta_preco_medicamento
+where pmc_20 = 0
+and COMERCIALIZACAO_2020 = "SIM"
+
+#b) Qual a Classe Terapêutica e Qual o valor da substâncias de maior Preço
+#Máximo ao Consumidor que estava em comercialização em 2020 e qual o
+#Laboratório que a Comercializava?
+
+select substancia, classe_terapeutica, laboratorio, pmc_20
+from port1.ta_preco_medicamento
+where pmc_20 = (select max(pmc_20) from port1.ta_preco_medicamento
+				        where COMERCIALIZACAO_2020 = "SIM");
+
+#c) Quais as 10 substâncias - sem repetições - de maior PMC comercializadas
+#em 2020 e seus respectivos laboratórios?
+
+create table port1.dezmais
+as
+(
+select substancia, laboratorio, pmc_20
+from port1.ta_preco_medicamento
+where COMERCIALIZACAO_2020 = "sim"
+order by PMC_20 DESC
+limit 13
+);
+
+alter table port1.dezmais
+add column id INT AUTO_INCREMENT PRIMARY KEY;
+
+with cte_table
+as(
+select id, substancia, laboratorio, pmc_20,
+row_number() over (partition by substancia) as contagem
+from port1.dezmais)
+
+delete from port1.dezmais
+using port1.dezmais
+join cte_table on port1.dezmais.id = cte_table.id
+where cte_table.contagem > 1;
+
+
+#d) Qual o valor médio das substâncias de Tarja Preta, considerando-se PMC 20%
+em comercialização em 2020?
+
+select round(avg(pmc_20),2) as Valor_Medio
+from port1.ta_preco_medicamento
+where tarja like "%preta%"
+and COMERCIALIZACAO_2020 = "SIM";
+
+#e) Qual o valor médio dos medicamentos de tarja vermelha, comercializados em
+#2020, destinados a farmacias, drogarias e entes da Adm Publica cujo Preço
+#era maior que Zero, utilizando-se a maior taxaçao (PF 20%)?
+
+
+select round(avg(pf_20),2) as Valor_Medio from port1.ta_preco_medicamento
+where COMERCIALIZACAO_2020 = "SIM"
+and pf_20 > 0
+and tarja like "%vermelha%";
