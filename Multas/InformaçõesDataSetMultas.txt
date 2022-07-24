@@ -1,0 +1,41 @@
+#Projeto de Análise de Dados Sistema Multa - Autuações de Trânsito em Rodovias
+Federais (2012/2)
+
+Os dados apresentados neste projeto são públicos e foram retirados do Portal
+Brasileiro dos Dados abertos em 20/07/2022, disponibilizados via:
+https://dados.gov.br/dataset/multas-rodovias-federais
+
+Tabela continha dezenas de milhões de registros no momento, do qual recortamos
+de maneira o primeiro milhão para análise.
+
+1- Limpeza e Formatação do Dataset:
+
+- Utilizamos duas tabelas: tbl_ai_valido e tbl_multas que podem apenas ser
+relacionadas pela chave "num_auto".
+- Uma série de colunas foram retiradas do dataset, seja por estarem praticamente
+ vazia ou por não representarem indicadores que consideramos útil a Análise
+ proposta.
+Ex: ind_observacao (indicativo se havia observações adicionais)
+    txt_data_infracao (formato da data em txt, mesmo havendo no formato data)
+    ind_laudo_medico (número do laudo médico)
+
+2- Análise dos dados
+Foram Feitas as Seguintes perguntas ao Dataset:
+
+a) Quais as 10 Estradas Federais (BR) com as maiores incidências de infrações?
+  a.1) Consideradas a BR 116, Qual a distribuição de infrações por Estados?
+
+b) Quando a infração foi cometida com abordagem e há informação sobre assinatura,
+quantos infratores que assinaram e não assinaram a infração?
+
+c) Qual velocidade média dos infratores onde o limite legal era de 100km/h, e
+qual a maior velocidade registrada?
+
+d) Qual distribuição das infrações nos dias da Semana?
+    d.1) Qual Horário do dia encontramos mais infrações?
+
+e) Qual os dados referentes à maior multa aplicada em 2012?
+
+3- Apresentação dos Dados
+Após a análise exploratória os dados, optei pela utilização do Google Data
+Studio para a criação dos Dashboard/Visualizações dos resultados

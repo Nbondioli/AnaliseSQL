@@ -1,0 +1,81 @@
+#a)Quais as 10 Estradas Federais (BR) com as maiores incidências de infrações?
+
+SELECT num_br_infracao as BR, count(dat_infracao) as Infracoes
+from port2.multasinfo
+group by BR
+order by Infracoes DESC
+limit 10;
+
+  #a.1) Consideradas a BR 116, Qual a distribuição de infrações por Estados?
+  select coalesce(num_br_infracao, 116) as BR,
+	   coalesce(uf_infracao, "Total") as UF,
+	   count(dat_infracao) as Infracoes
+  from port2.multasinfo
+  where num_br_infracao = 116
+  group by num_br_infracao, uf_infracao with Rollup
+  order by infracoes
+  limit 12;
+
+  #b)Quando a infração foi cometida com abordagem e há informação sobre assinatura,
+  #quantos infratores que assinaram e não assinaram a infração?
+
+  with cte_table as
+(
+select
+	case
+	when ind_assinou_auto = "N" then "Nao"
+	Else "Sim"
+	End as Assinou,
+count(ind_assinou_auto) over (partition by ind_assinou_auto) as Quantidade
+from port2.multasinfo
+where ind_assinou_auto != ""
+)
+select * from cte_table
+group by Quantidade
+
+
+#c) Qual velocidade média dos infratores onde o limite legal era de 100km/h, e
+#qual a maior velocidade registrada?
+
+select round(avg(med_realizada)) as Media_Velocidade,
+	   max(med_realizada) as Maior_Velocidade
+from port2.multasinfo
+where lim_regulamentar = 100
+
+#d) Qual distribuição das infrações nos dias da Semana?
+with
+cte_table as
+(
+select
+dayname(STR_TO_DATE(dat_infracao, '%d/%m/%Y %H:%i')) as Dia_Semana,
+count(num_auto) over (partition by dayname(STR_TO_DATE(dat_infracao, '%d/%m/%Y %H:%i'))) as Quantidade
+from port2.multasinfo
+)
+
+select * from cte_table
+group by Quantidade
+Order by Quantidade DESC;
+
+  #d.1) Qual Horário do dia encontramos mais infrações?
+  with
+  cte_table as
+  (
+  select
+  HOUR(STR_TO_DATE(dat_infracao, '%d/%m/%Y %H:%i')) as Hora,
+  count(num_auto) over (partition by HOUR(STR_TO_DATE(dat_infracao, '%d/%m/%Y %H:%i'))) as Quantidade
+  from port2.multasinfo
+  )
+
+  select * from cte_table
+  group by Quantidade
+  Order by Quantidade DESC;
+
+#e) Qual os dados referentes à maior multa aplicada em 2012/2?
+
+SELECT
+M.num_br_infracao as BR, M.uf_infracao as UF, M.dat_infracao as Data,
+M.nom_modelo_veiculo as Veiculo, M.tip_medicao as Tipo_Medicao,M.med_realizada as Medicao,
+M.lim_regulamentar as Limite, P.val_multa as Multa, P.val_pago as Valor_Pago
+FROM port2.multaspagas P
+Join port2.multasinfo M
+on P.num_auto = M.num_auto
